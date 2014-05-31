@@ -22,5 +22,7 @@ void searchData(UserInfo *userInfo, int user_count);
 int saveData();
 
 int isNotValidNum(char *data);
+int isNotValidChar(char *data);
+int isNotValidId(char *data);
 
 #endif

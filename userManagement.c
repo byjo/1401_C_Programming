@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <Windows.h>
 #include "UserManagement.h"
 
 #define USER_COUNT 50
@@ -35,7 +36,6 @@ int main(void)
 
 		menu();
 		input = _getch();
-
 		switch (input){
 		case '1':
 			printAllData(userInfo, user_count);
@@ -74,6 +74,15 @@ int main(void)
 void deleteData(UserInfo *userInfo, int *data_idx)
 {
 	char input=0;
+
+	if (*data_idx == -1)
+		return;
+
+	if (*data_idx == 0){
+		printf("데이터 없다, 나가라면 아무거나 눌러");
+		_getch();
+		return;
+	}
 	
 	printf("삭제 할래?\n");
 
@@ -105,11 +114,12 @@ void deleteData(UserInfo *userInfo, int *data_idx)
 
 void searchData2(UserInfo *userInfo, int user_count, int *data_idx)
 {
-	char data[10];
+	char data[100];
 	char input = 0;
 
 	int i;
 	while (input != '4'){
+		*data_idx = 0;
 
 		system("cls");
 
@@ -126,6 +136,10 @@ void searchData2(UserInfo *userInfo, int user_count, int *data_idx)
 		case '1':
 			printf("찾으실 ID: ");
 			gets(data);
+			while (isNotValidId(data)){
+				printf("다시입력\nID: ");
+				gets(data);
+			}
 			for (i = 0; i < user_count; i++){
 				if (atoi(data) == userInfo[i].userId)
 					*data_idx = i;
@@ -137,6 +151,10 @@ void searchData2(UserInfo *userInfo, int user_count, int *data_idx)
 		case '2':
 			printf("찾으실 이름: ");
 			gets(data);
+			while (isNotValidChar(data)){
+				printf("다시입력\n이름: ");
+				gets(data);
+			}
 			for (i = 0; i < user_count; i++){
 				if (strcmp(data, userInfo[i].userName) == 0)
 					*data_idx = i;
@@ -148,6 +166,10 @@ void searchData2(UserInfo *userInfo, int user_count, int *data_idx)
 		case '3':
 			printf("찾으실 전화번호: ");
 			gets(data);
+			while (isNotValidNum(data)){
+				printf("다시입력\n전화번호: ");
+				gets(data);
+			}
 			for (i = 0; i < user_count; i++){
 				if (strcmp(data, userInfo[i].userPhone) == 0)
 					*data_idx = i;
@@ -157,6 +179,7 @@ void searchData2(UserInfo *userInfo, int user_count, int *data_idx)
 			break;
 
 		case '4':
+			*data_idx = -1;
 			break;
 
 		default:
@@ -172,6 +195,15 @@ void updateData(UserInfo *userInfo, int *data_idx)
 
 	char input = 0;
 
+	if (*data_idx == -1)
+		return;
+
+	if (*data_idx == 0){
+		printf("데이터 없다, 나가라면 아무거나 눌러");
+		_getch();
+		return;
+	}
+
 	while (input != '4'){
 
 		printf("뭐 수정?\n");
@@ -185,28 +217,28 @@ void updateData(UserInfo *userInfo, int *data_idx)
 
 		switch(input){
 		case '1':
-			if (data_idx != 0){
-				printf("수정하실 이름을 입력: ");
+			printf("수정하실 이름을 입력: ");
+			scanf("%s", userInfo[*data_idx].userName);
+			while (isNotValidChar(userInfo[*data_idx].userName)){
+				printf("다시입력\n이름: ");
 				scanf("%s", userInfo[*data_idx].userName);
 			}
-			else
-				printf("찾는거 없음\n");
 			break;
 		case '2':
-			if (data_idx != 0){
-				printf("수정하실 주소 입력: ");
-				scanf("%s", userInfo[*data_idx].userAddress);
+			printf("수정하실 주소 입력: ");
+			scanf("%s", userInfo[*data_idx].userAddress);
+			while (isNotValidChar(userInfo[*data_idx].userAddress)){
+				printf("다시입력\n주소: ");
+				scanf("%s",userInfo[*data_idx].userAddress);
 			}
-			else
-				printf("찾는거 없음\n");
 			break;
 		case '3':
-			if (data_idx != 0){
-				printf("수정하실 전화번호을 입력: ");
-				scanf("%s", userInfo[*data_idx].userPhone);
+			printf("수정하실 전화번호을 입력: ");
+			scanf("%s", userInfo[*data_idx].userPhone);
+			while (isNotValidNum(userInfo[*data_idx].userPhone)){
+				printf("다시입력\n전화번호: ");
+				scanf("%s",userInfo[*data_idx].userPhone);
 			}
-			else
-				printf("찾는거 없음\n");
 			break;
 		case '4':
 			break;
@@ -236,9 +268,10 @@ void searchData(UserInfo *userInfo, int user_count)
 	int data_idx;
 	int whileLoopCount = 0;
 
-	system("cls");
 	while (input != '4'){
 		
+		data_idx = 0;
+
 		if (whileLoopCount > 0){
 
 			int didInputDirty = 0;
@@ -259,6 +292,7 @@ void searchData(UserInfo *userInfo, int user_count)
 			}
 		}
 		system("cls");
+		printf("회원검색\n");
 		whileLoopCount++;
 
 		printf("어떤 정보?\n");
@@ -274,6 +308,10 @@ void searchData(UserInfo *userInfo, int user_count)
 		case '1':
 			printf("찾으실 ID: ");
 			gets(data);
+			while (isNotValidId(data)){
+				printf("다시입력\nID: ");
+				gets(data);
+			}
 			for (i = 0; i < user_count; i++){
 				if (atoi(data) == userInfo[i].userId)
 					data_idx = i;
@@ -284,6 +322,10 @@ void searchData(UserInfo *userInfo, int user_count)
 		case '2':
 			printf("찾으실 이름: ");
 			gets(data);
+			while (isNotValidChar(data)){
+				printf("다시입력\n이름: ");
+				gets(data);
+			}
 			for (i = 0; i < user_count; i++){
 				if (strcmp(data,userInfo[i].userName)==0)
 					data_idx = i;
@@ -294,6 +336,10 @@ void searchData(UserInfo *userInfo, int user_count)
 		case '3':
 			printf("찾으실 전화번호: ");
 			gets(data);
+			while (isNotValidNum(data)){
+				printf("다시입력\n전화번호: ");
+				gets(data);
+			}
 			for (i = 0; i < user_count; i++){
 				if (strcmp(data, userInfo[i].userPhone)==0)
 					data_idx = i;
@@ -321,6 +367,8 @@ int saveData(UserInfo *userInfo, int user_count)
 		return -1;
 	}
 
+	system("cls");
+	printf("회원저장\n");
 	for (i = 0; i < user_count; i++){
 		if (userInfo[i].userId!=0)
 			fprintf(saveFile, "%d\t%s\t%s\t%s\n",
@@ -335,11 +383,23 @@ int saveData(UserInfo *userInfo, int user_count)
 	return 0;
 }
 
+int isNotValidId(char *data)
+{
+	int len = strlen(data);
+
+	if (len!=6)
+		return 1;
+
+
+
+	return 0;
+}
+
 
 int isNotValidChar(char *data)
 {
 	int len = strlen(data);
-
+	
 	if (len == 0)
 		return 1;
 
@@ -380,6 +440,8 @@ void insertData(UserInfo *userInfo, int *user_count, int *new_count)
 	while (input != '2'){
 
 		system("cls");
+
+		printf("회원등록\n");
 
 		printf("추가하실 데이터를 입력하세요\n");
 
@@ -457,6 +519,8 @@ void printAllData(UserInfo *userInfo, int user_count){
 	char input;
 
 	system("cls");
+
+	printf("회원보기\n");
 
 	for (i = 0; i < user_count; i++){
 		if (userInfo[i].userId != 0)
