@@ -10,7 +10,6 @@ typedef struct userinfo{
 
 }UserInfo;
 
-
 void menu();
 
 int loadData(UserInfo *userInfo, FILE *fp);

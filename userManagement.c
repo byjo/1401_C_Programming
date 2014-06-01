@@ -797,5 +797,4 @@ int isNotValidNum(char *data)
 	}
 
 	return 0;
-
 }
