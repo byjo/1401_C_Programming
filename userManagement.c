@@ -119,6 +119,95 @@ int loadData(UserInfo *userInfo, FILE *fp)
 	return count;
 }
 
+void printAllData(UserInfo *userInfo, int user_count){
+
+	int i = 0;
+	int user_num = 1;
+
+	system("cls");
+
+	printf("=====================================================\n");
+	printf("ID\t이름\t주소\t\t\t연락처\n");
+	printf("-----------------------------------------------------\n");
+
+	while (i < user_count){
+
+		printf("%d\t%s\t%s\t%s\n",
+			userInfo[i].userId, userInfo[i].userName, userInfo[i].userAddress, userInfo[i].userPhone);
+		user_num++;
+		i++;
+
+		if (user_num > PRINT_NUM){
+			user_num = 1;
+			printf("------------------------------------------%d page-----\n", i / PRINT_NUM);
+			printf("=====================================================\n");
+			printf("      1:이전 페이지 2.다음 페이지 3.메인 메뉴 \n");
+			printf("=====================================================\n");
+
+			switch (_getch()){
+			case '1':
+				i -= 2 * PRINT_NUM;
+				if (i < 1)
+					i = 0;
+				break;
+			case '2':
+				printf("\n");
+				break;
+			case '3':
+				i = user_count + 2;
+				break;
+			default:
+				printf("enter 1 to 3\n");
+			}
+
+			system("cls");
+			printf("=====================================================\n");
+			printf("ID\t이름\t주소\t\t\t연락처\n");
+			printf("-----------------------------------------------------\n");
+		}
+
+		if (i == user_count){
+
+			while (PRINT_NUM%user_num == 0){
+				printf("\n");
+				user_num++;
+			}
+			printf("------------------------------------------%d page-----\n", i / PRINT_NUM);
+			printf("=====================================================\n");
+			printf("      1:이전 페이지 2.다음 페이지 3.메인 메뉴 \n");
+			printf("=====================================================\n");
+
+			switch (_getch()){
+			case '1':
+				i = ((i / PRINT_NUM) - 2)*PRINT_NUM + 1;
+				user_num = 1;
+
+				system("cls");
+				printf("=====================================================\n");
+				printf("ID\t이름\t주소\t\t\t연락처\n");
+				printf("-----------------------------------------------------\n");
+				break;
+			case '2':
+				i = i - user_count%PRINT_NUM;
+				user_num = 1;
+
+				system("cls");
+				printf("=====================================================\n");
+				printf("ID\t이름\t주소\t\t\t연락처\n");
+				printf("-----------------------------------------------------\n");
+				break;
+			case '3':
+				i = user_count + 2;
+				break;
+			default:
+				printf("enter 1 to 3\n");
+			}
+
+		}
+	}
+}
+
+/*
 //회원보기
 void printAllData(UserInfo *userInfo, int user_count){
 
@@ -155,7 +244,7 @@ void printAllData(UserInfo *userInfo, int user_count){
 
 	return;
 }
-
+*/
 
 
 // 회원등록 
@@ -679,36 +768,41 @@ void continueAct(char *input)
 }
 
 /* ID 유효성 체크:
+1. 6자리인지 확인
+2. 모든 입력값이 정수인지 확인
 */
 int isNotValidId(char *data)
 {
 	int len = strlen(data);
+	int i;
 
 	if (len!=6)
 		return 1;
+
+	for (i = 0; i < len; i++){
+		if (*data<48 || *data>57)
+			return 1;
+
+		data++;
+	}
 
 	return 0;
 }
 
 /* 이름, 주소 유효성 체크:
 1. NULL값이 아닌지 확인
-2. 최소 하나의 문자값이 있는지 확인
+2. 맨 첫번째 칸 띄어쓰기 확인
 +) 이0씨를 위해 이름에 숫자가 들어가는 체크는 하지 않았습니다.(단호박)
 */
 int isNotValidChar(char *data)
 {
 	int len = strlen(data);
-	//int i;
 	
 	if (len == 0)
 		return 1;
 	
-	//아스키 코드 확인
-	/*for (i = 0; i < strlen; i++){
-		if (data)
-			return 1;
-		data++;
-	}*/
+	if (*data==32)
+		return 1;
 
 	return 0;
 }
