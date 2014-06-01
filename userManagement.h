@@ -11,18 +11,25 @@ typedef struct userinfo{
 }UserInfo;
 
 void menu();
+
 int loadData(UserInfo *userInfo, FILE *fp);
 void printAllData(UserInfo *userInfo, int user_count);
 void insertData(UserInfo *userInfo, int *user_count, int *new_count);
 void searchData2(UserInfo *userInfo, int user_count, int *data_idx);
-void printSingleData(UserInfo *userInfo, int *data_idx);
-void deleteData(UserInfo *userInfo, int *data_idx);
+void deleteData(UserInfo *userInfo, int *data_idx, char *continue_act);
 void updateData(UserInfo *userInfo, int *data_idx);
 void searchData(UserInfo *userInfo, int user_count);
-int saveData();
+int saveData(UserInfo *userInfo, int user_count, int *chk_exit);
 
-int isNotValidNum(char *data);
-int isNotValidChar(char *data);
+void printSingleData(UserInfo *userInfo, int *data_idx);
+int checkBigId(UserInfo *userInfo, int *user_count);
+int checkDuplicated(UserInfo *userInfo, int *user_count);
+void checkSave(UserInfo *userInfo, int user_count);
+
+void continueAct(char *input);
+
 int isNotValidId(char *data);
+int isNotValidChar(char *data);
+int isNotValidNum(char *data);
 
 #endif
