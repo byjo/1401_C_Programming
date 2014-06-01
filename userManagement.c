@@ -119,6 +119,7 @@ int loadData(UserInfo *userInfo, FILE *fp)
 	return count;
 }
 
+//회원보기
 void printAllData(UserInfo *userInfo, int user_count){
 
 	int i = 0;
@@ -206,46 +207,6 @@ void printAllData(UserInfo *userInfo, int user_count){
 		}
 	}
 }
-
-/*
-//회원보기
-void printAllData(UserInfo *userInfo, int user_count){
-
-	int i = 0;
-	int user_num = 1;
-	int page = 1;
-	char input=0;
-
-	system("cls");
-
-	printf("회원보기\n");
-
-	for (i = 0; i < user_count; i++){
-		if (userInfo[i].userId != 0)
-			printf("%d\t%s\t%s\t%s\n",
-			userInfo[i].userId, userInfo[i].userName, userInfo[i].userAddress, userInfo[i].userPhone);
-	}
-
-	printf("3.메인메뉴 이동\n");
-
-	while (input != '3'){
-		input = _getch();
-		switch (input) {
-		case '1':
-			break;
-		case '2':
-			break;
-		case '3':
-			break;
-		default:
-			break;
-		}
-	}
-
-	return;
-}
-*/
-
 
 // 회원등록 
 void insertData(UserInfo *userInfo, int *user_count, int *new_count)
