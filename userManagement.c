@@ -60,7 +60,9 @@ int main(void)
 			}
 			break;
 		case '5': // 회원검색
-			searchData(userInfo, user_count, data_idx, &search_num);
+			while (continue_act != QUIT){
+				searchData2(userInfo, user_count, data_idx, &search_num);
+			}
 			break;
 		case '6': // 저장
 			saveData(userInfo, user_count, 0);
@@ -68,7 +70,7 @@ int main(void)
 		case QUIT: // 종료
 			if (bf_update_save > 0)
 				checkSave(userInfo, user_count);
-			printf("잘가요\n");
+			gotoxy(6, 22); printf("잘가요. . . ");
 			system("exit");
 			break;
 		default:
@@ -644,8 +646,8 @@ int saveData(UserInfo *userInfo, int user_count, int *chk_exit)
 		return -1;
 	}
 
-	system("cls");
-	printf("회원저장\n");
+	printUp();
+	gotoxy(55, 3); puts("회원 정보 저장");
 
 	fprintf(saveFile, "회원 아이디	회원 이름	회원 주소	핸드폰 번호\n"); //Index 저장
 	for (i = 0; i < user_count; i++){
@@ -657,15 +659,16 @@ int saveData(UserInfo *userInfo, int user_count, int *chk_exit)
 	fclose(saveFile);
 
 	bf_update_save = 0;
-	printf("저장 되었습니다\n");
+	gotoxy(18, 9); printf("모든 회원 정보가 data.txt에 저장 되었습니다\n");
 	
 	if (chk_exit){
-		printf("종료하려면 아무키나 누르세요\n");
+		gotoxy(55, 3); puts("  프로그램 종료");
+		gotoxy(6, 22); printf("종료하려면 아무키나 누르세요\n");
 		_getch();
 		return 0;
 	}
 	
-	printf("메인메뉴로 돌아가려면 아무키나 누르세요\n");
+	gotoxy(6, 22); printf("메인메뉴로 돌아가려면 아무키나 누르세요\n");
 	_getch();
 	
 	return 0;
@@ -738,7 +741,10 @@ void checkSave(UserInfo *userInfo, int user_count)
 	char input;
 	int chk_exit = 1;
 
-	printf("%d개의 저장되지 않은 사항이 있습니다.\n저장하시고 종료하시겠습니까? 1.예 2.아니오\n", bf_update_save);
+	printUp();
+	gotoxy(58, 3); printf("Before Save");
+	gotoxy(20, 9); printf("%d개의 저장되지 않은 사항이 있습니다.", bf_update_save);
+	gotoxy(6, 22); printf("저장하시고 종료하시겠습니까? 1.예 2.아니오 ");
 	input = _getch();
 
 	switch (input){
