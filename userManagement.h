@@ -12,11 +12,27 @@ typedef struct userinfo{
 
 #define PRINT_NUM 10
 
+#define YES '1'
+#define NO '2'
 #define QUIT 48
-#define ID 49
-#define NAME 50
-#define PHONE 51
 
+#define VIEW_USERINFO '1'
+#define INSERT_USERINFO '2'
+#define DELETE_USERINFO '3'
+#define UPDATE_USERINFO '4'
+#define SEARCH_USERINFO '5'
+#define SAVE_USERINFO '6'
+
+#define PREV_PAGE '1'
+#define NEXT_PAGE '2'
+
+#define SEARCH_ID '1'
+#define SEARCH_NAME '2'
+#define SEARCH_PHONE '3'
+
+#define UPDATE_NAME '1'
+#define UPDATE_ADDRESS '2'
+#define UPDATE_PHONE '3'
 
 int loadData(UserInfo *userInfo, FILE *fp);
 void initData(UserInfo *userInfo);

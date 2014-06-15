@@ -28,22 +28,22 @@ int main(void)
 		
 		input = _getch();
 		switch (input){
-		case '1': // 회원보기
+		case VIEW_USERINFO: // 회원보기
 			printAllData(userInfo, user_count);
 			break;
-		case '2': // 회원등록
+		case INSERT_USERINFO: // 회원등록
 			insertData(userInfo, &user_count, data_idx, &search_num);
 			break;
-		case '3': // 회원검색 후 검색 회원 삭제
+		case DELETE_USERINFO: // 회원검색 후 검색 회원 삭제
 			searchMain(userInfo, &user_count, data_idx, &search_num, 1);
 			break;
-		case '4': // 회원검색 후 검색 회원 수정
+		case UPDATE_USERINFO: // 회원검색 후 검색 회원 수정
 			searchMain(userInfo, &user_count, data_idx, &search_num, 2);
 			break;
-		case '5': // 회원검색
+		case SEARCH_USERINFO: // 회원검색
 			searchMain(userInfo, &user_count, data_idx, &search_num, 3);
 			break;
-		case '6': // 저장
+		case SAVE_USERINFO: // 저장
 			saveData(userInfo, user_count, 0);
 			break;
 		case QUIT: // 종료
@@ -136,7 +136,7 @@ void printAllData(UserInfo *userInfo, int user_count)
 
 			warnInvaildInput(&input);
 			switch (input){
-			case '1': // 이전 페이지
+			case PREV_PAGE: // 이전 페이지
 				clearSection(6,8,PRINT_NUM);
 				if (page == 1){ // 맨 첫번 째 페이지
 					i = (page - 1) * PRINT_NUM;
@@ -148,7 +148,7 @@ void printAllData(UserInfo *userInfo, int user_count)
 				}
 				break;
 
-			case '2': // 다음 페이지
+			case NEXT_PAGE: // 다음 페이지
 				clearSection(6,8,PRINT_NUM);
 				if (page == total_page){ //마지막 페이지
 					i = (page - 1)*PRINT_NUM;
@@ -235,13 +235,13 @@ void insertData(UserInfo *userInfo, int *user_count, int *data_idx, int *search_
 
 			warnInvaildInput(&input_chk_dup);
 			switch (input_chk_dup){
-			case '1': // 중복 회원 등록
+			case YES: // 중복 회원 등록
 				(*user_count)++;
 				bf_update_save++;
 				gotoxy(30, 19); printf("등록 되었습니다!\n");
 				continueAct(&input,"등록");
 				break;
-			case '2': // 중복 회원 등록 안함
+			case NO: // 중복 회원 등록 안함
 				userInfo[*user_count].userId = 0;
 				continueAct(&input,"등록");
 				break;
@@ -271,7 +271,7 @@ void searchMain(UserInfo *userInfo, int *user_count, int *data_idx, int *search_
 
 		else if (menu == 2){ // 수정
 			updateData(userInfo, user_count, data_idx, search_num, &continue_act);
-			if (!continue_act)
+			if (continue_act!=QUIT)
 				continueAct(&continue_act, "수정");
 		}
 
@@ -297,7 +297,7 @@ void searchData(UserInfo *userInfo, int user_count, int *data_idx, int *search_n
 
 	warnInvaildInput(&input);
 	switch (input){
-	case '1': // ID 검색
+	case SEARCH_ID: // ID 검색
 		gotoxy(6, 22); clearLine();
 		gotoxy(25, 9); printf(" I        D : ");
 		gotoxy(6, 22); printf("6자리 숫자의 ID를 입력해주세요");
@@ -318,7 +318,7 @@ void searchData(UserInfo *userInfo, int user_count, int *data_idx, int *search_n
 		printSingleData(userInfo, data_idx, search_num); // 검색 자료 출력
 		break;
 
-	case '2': // 이름 검색
+	case SEARCH_NAME: // 이름 검색
 		gotoxy(6, 22); clearLine();
 		gotoxy(25, 9); printf("이       름 : ");
 		gotoxy(6, 22); printf("1-4자의 한글 이름을 입력해 주세요");
@@ -339,7 +339,7 @@ void searchData(UserInfo *userInfo, int user_count, int *data_idx, int *search_n
 		printSingleData(userInfo, data_idx, search_num); // 검색 자료 출력
 		break;
 
-	case '3': // 전화번호 검색
+	case SEARCH_PHONE: // 전화번호 검색
 		gotoxy(6, 22); clearLine();
 		gotoxy(25, 9); printf("전 화 번 호 : ");
 		gotoxy(6, 22); printf("(000-0000-0000의 형식으로 '-'포함 입력해주세요)\n");
@@ -386,14 +386,14 @@ void deleteData(UserInfo *userInfo, int *user_count, int *data_idx, int *search_
 	warnInvaildInput(&input);
 
 	switch (input){
-	case '1':
+	case YES:
 		gotoxy(30, 19); printf("삭제 되었습니다!\n");
 		deleteUser(userInfo, &select_idx);
 		bf_update_save++;
 		(*user_count)--;
 		break;
 
-	case '2':
+	case NO:
 		return;
 
 	default:
@@ -412,6 +412,9 @@ void updateData(UserInfo *userInfo, int *user_count, int *data_idx, int *search_
 
 	while (*continue_act != QUIT){
 
+		if (*continue_act == NO)
+			break;
+
 		gotoxy(25, 6); printf("어떤 정보를 수정 하시겠습니까?\n");
 		gotoxy(25, 9); clearLine();
 		gotoxy(6, 22); clearLine();
@@ -419,7 +422,7 @@ void updateData(UserInfo *userInfo, int *user_count, int *data_idx, int *search_
 
 		warnInvaildInput(&input);
 		switch(input){
-		case '1':
+		case UPDATE_NAME:
 			gotoxy(25, 9); printf("이       름 : ");
 			gotoxy(6, 22); clearLine();
 			gotoxy(6, 22); printf("수정하실 1-4자의 한글 이름을 입력해 주세요");
@@ -435,7 +438,7 @@ void updateData(UserInfo *userInfo, int *user_count, int *data_idx, int *search_
 			continueAct(continue_act,"더 수정");
 			break;
 
-		case '2':
+		case UPDATE_ADDRESS:
 			gotoxy(25, 9); printf("주       소 : ");
 			gotoxy(6, 22); clearLine();
 			gotoxy(6, 22); printf("수정하실 주소를 입력해 주세요");
@@ -451,7 +454,7 @@ void updateData(UserInfo *userInfo, int *user_count, int *data_idx, int *search_
 			continueAct(continue_act,"더 수정");
 			break;
 
-		case '3':
+		case UPDATE_PHONE:
 			gotoxy(25, 9); printf("전 화 번 호 : ");
 			gotoxy(6, 22); clearLine();
 			gotoxy(6, 22); printf("수정하실 전화번호를 000-0000-0000의 형식으로 '-'포함 입력해주세요");
@@ -582,7 +585,7 @@ void printSingleData(UserInfo *userInfo, int *data_idx, int *search_num)
 }
 
 /* 작업을 계속 수행할지 확인
-모든 함수에서 input=='0' 일 때 메인메뉴로 이동
+모든 함수에서 input==QUIT 일 때 메인메뉴로 이동
 */
 void continueAct(char *continue_act, char *menu)
 {
@@ -597,14 +600,14 @@ void continueAct(char *continue_act, char *menu)
 		gotoxy(6, 22); printf("다른 회원을 %s 하시겠습니까? 1.예 0.메인메뉴\n", menu);
 	}
 
-	continue_input = _getch();
-
+	//continue_input = _getch();
+	warnInvaildInput(&continue_input);
 	switch (continue_input) {
-	case '1': // 계속
+	case YES: // 계속
 		*continue_act = 0;
 		return;
-	case '2': // 아니오
-		*continue_act = QUIT;
+	case NO: // 아니오
+		*continue_act = NO;
 		break;
 	case QUIT: // 메인메뉴
 		*continue_act = QUIT;
@@ -648,7 +651,6 @@ void checkDuplicated(UserInfo *userInfo, int *user_count, int *data_idx, int *se
 			(*search_num)++;
 		}
 	}
-
 	return;
 }
 
@@ -659,7 +661,6 @@ void checkSave(UserInfo *userInfo, int user_count)
 	int chk_exit = 1;
 
 	printUp();
-
 
 	if (bf_update_save == 0){ // 변경사항이 모두 저장 or 변경사항이 없을 때
 		gotoxy(64, 3); printf("Exit");
@@ -673,10 +674,10 @@ void checkSave(UserInfo *userInfo, int user_count)
 	
 	warnInvaildInput(&input);
 	switch (input){
-	case '1': // 저장 후 종료
+	case YES: // 저장 후 종료
 		saveData(userInfo, user_count, &chk_exit);
 		break;
-	case '2': // 그냥 종료
+	case NO: // 그냥 종료
 		break;
 	default:
 		warnInvaildInsert();
